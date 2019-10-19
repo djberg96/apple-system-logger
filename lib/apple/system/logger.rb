@@ -216,7 +216,12 @@ module Apple
           asl_key = map_key_to_asl_key(key)
           flags = ASL_QUERY_OP_EQUAL
           flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
-          flags = (flags | ASL_QUERY_OP_REGEX) if value.is_a?(Regexp)
+
+          if value.is_a?(Regexp)
+            flags = (flags | ASL_QUERY_OP_REGEX)
+            flags = (flags | ASL_QUERY_OP_CASEFOLD) if value.casefold?
+          end
+
           asl_set_query(aslmsg, asl_key, value.to_s, flags)
         end
 
