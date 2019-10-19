@@ -38,6 +38,14 @@ RSpec.describe Apple::System::Logger do
   end
 
   context "logging methods" do
+    example "there is a << method" do
+      expect(log).to respond_to(:<<)
+    end
+
+    example "there is an add method" do
+      expect(log).to respond_to(:add)
+    end
+
     example "there is a debug method" do
       expect(log).to respond_to(:debug)
     end
