@@ -26,6 +26,10 @@ module Apple
       ASL_TYPE_FILE   = 3
       ASL_TYPE_STORE  = 4
       ASL_TYPE_CLIENT = 5
+
+      ASL_OPT_STDERR		= 0x00000001
+      ASL_OPT_NO_DELAY  = 0x00000002
+      ASL_OPT_NO_REMOTE = 0x00000004
     end
   end
 end
