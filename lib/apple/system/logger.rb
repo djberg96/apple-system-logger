@@ -56,46 +56,74 @@ module Apple
         asl_set_filter(@aslclient, @level)
       end
 
+      # Log a debug message.
+      #
       def debug(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
       end
 
+      # Returns true if the current severity level allows for the printing of debug messages.
+      #
+      def debug?
+        level >= ASL_LEVEL_DEBUG
+      end
+
+      # Log an info message.
+      #
       def info(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
       end
 
+      # Returns true if the current severity level allows for the printing of info messages.
+      #
       def info?
         level >= ASL_LEVEL_INFO
       end
 
+      # Log a warning message.
+      #
       def warn(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
       end
 
+      # Returns true if the current severity level allows for the printing of warning messages.
+      #
       def warn?
         level >= ASL_LEVEL_WARNING
       end
 
+      # Log an error message.
+      #
       def error
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
       end
 
+      # Returns true if the current severity level allows for the printing of erro messages.
+      #
       def error?
         level >= ASL_LEVEL_ERR
       end
 
+      # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
+      #
       def fatal
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
       end
 
+      # Returns true if the current severity level allows for the printing of fatal messages.
+      #
       def fatal?
         level >= ASL_LEVEL_CRIT
       end
 
+      # Log an unknown message. For this library that means an ASL_LEVEL_EMERG message.
+      #
       def unknown(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
       end
 
+      # Close the logger instance. You should always do this.
+      #
       def close
         asl_close(@aslclient) if @aslclient
       end
