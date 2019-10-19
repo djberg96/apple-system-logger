@@ -1,8 +1,10 @@
 require 'rake'
 require 'rake/clean'
-require 'rake/testtask'
 require 'rbconfig'
+require 'rspec/core/rake_task'
 include RbConfig
+
+RSpec::Core::RakeTask.new(:spec)
 
 CLEAN.include('**/*.gem', '**/*.rbc', '**/*.rbx')
 
