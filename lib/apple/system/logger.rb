@@ -13,9 +13,6 @@ module Apple
       # The logging severity threshold. The default is debug.
       attr_accessor :level
 
-      # A printf style formatting string that will be applied to messages. The system default is '%s'.
-      attr_accessor :format
-
       # The program name, or ident, that becomes the key sender. The default is nil.
       attr_accessor :progname
 
@@ -57,11 +54,12 @@ module Apple
       #   Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program') do |log|
       #     log.warn("Some warning message")
       #   end
+      #--
+      # TODO: Add string format support and apply it to messages.
       #
       def initialize(**kwargs)
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
-        @format   = kwargs[:format]
         @progname = kwargs[:progname]
         @logdev   = kwargs[:logdev]
 
