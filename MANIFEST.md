@@ -3,6 +3,7 @@
 * Rakefile
 * README.md
 * apple-system-logger.gemspec
+* certs/djberg96_pub.pem
 * lib/apple-system-logger.rb
 * lib/apple/system/logger.rb
 * lib/apple/system/logger/constants.rb
