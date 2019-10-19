@@ -10,20 +10,21 @@ module Apple
       attr_accessor :facility
       attr_accessor :level
       attr_accessor :format
+      attr_accessor :progname
+      attr_accessor :logdev
 
       def initialize(**kwargs)
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
         @format   = kwargs[:format]
         @progname = kwargs[:progname]
+        @logdev   = kwargs[:logdev]
 
         if @logdev || @facility || @progname
-          @logdev = kwargs[:logdev]
           options = ASL_OPT_NO_DELAY | ASL_OPT_NO_REMOTE
           @aslclient = asl_open(@progname, @facility, options)
 
           if @logdev
-            @logdev = File.open(@logdev, 'w') unless @logdev.respond_to?(:fileno)
             asl_add_log_file(@aslclient, @logdev.fileno)
           end
         else
@@ -77,7 +78,6 @@ module Apple
       end
 
       def close
-        @logdev.close if @logdev
         asl_close(@aslclient) if @aslclient
       end
     end
@@ -86,11 +86,11 @@ end
 
 if $0 == __FILE__
   #log = Apple::System::Logger.new(level: Apple::System::Logger::ASL_LEVEL_NOTICE)
-  log = Apple::System::Logger.new(logdev: 'temp.txt', progname: "rubyprog", facility: "dberger.test")
+  log = Apple::System::Logger.new(logdev: $stdout, progname: "rubyprog", facility: "dberger.test")
   #log = Apple::System::Logger.new(logdev: $stderr, progname: "rubyprog", facility: "dberger.test")
   #p log.info?
   #p log.warn?
   #log.info("GREETINGS DANIEL - INFO")
-  log.warn("GREETINGS DANIEL - WARN6")
+  log.warn("GREETINGS DANIEL - WARN7")
   log.close
 end
