@@ -33,6 +33,23 @@ module Apple
       #
       # Note that the logdev only seems to work with $stdout or $stderr, if provided.
       #
+      # For the severity level, the possible values are:
+      #
+      # * ASL_LEVEL_EMERG
+      # * ASL_LEVEL_ALERT
+      # * ASL_LEVEL_CRIT
+      # * ASL_LEVEL_ERR
+      # * ASL_LEVEL_WARNING
+      # * ASL_LEVEL_NOTICE
+      # * ASL_LEVEL_INFO
+      # * ASL_LEVEL_DEBUG
+      #
+      # Example:
+      #
+      #   log = Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program')
+      #
+      #   log.warn("Some warning message")
+      #
       def initialize(**kwargs)
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
