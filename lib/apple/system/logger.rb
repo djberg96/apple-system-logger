@@ -167,12 +167,107 @@ module Apple
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
       end
 
+      # Search the logs using the provided query. The query should be a hash of
+      # options. Returns a hash of key-value pairs.
+      #
+      # Example:
+      #
+      #   log = Apple::System::Logger.new
+      #
+      #   options = {
+      #     :sender => 'bootlog'
+      #     :level  => 5
+      #   }
+      #
+      #   results = log.search(options)
+      #
+      #   # Sample output
+      #
+      #   {
+      #     "ASLMessageID"  => "1",
+      #     "Time"          => "1570858104",
+      #     "TimeNanoSec"   => "0",
+      #     "Level"         => "5",
+      #     "PID"           => "0",
+      #     "UID"           => "0",
+      #     "GID"           => "0",
+      #     "ReadGID"       => "80",
+      #     "Host"          => "localhost",
+      #     "Sender"        => "bootlog",
+      #     "Facility"      => "com.apple.system.utmpx",
+      #     "Message"       => "BOOT_TIME 1570858104 0",
+      #     "ut_id"         => "0x00 0x00 0x00 0x00",
+      #     "ut_pid"        => "1",
+      #     "ut_type"       => "2",
+      #     "ut_tv.tv_sec"  => "1570858104",
+      #     "ut_tv.tv_usec" => "0",
+      #     "ASLExpireTime" => "1602480504"
+      #   }
+      #
+      # Only basic equality checks are used for now. In the future, I will allow
+      # for more advanced queries.
+      #
+      def search(query)
+        value  = nil
+        aslmsg = asl_new(ASL_TYPE_QUERY)
+        result = {}
+
+        query.each do |key, value|
+          asl_key = map_key_to_asl_key(key)
+          flags = ASL_QUERY_OP_EQUAL
+          flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
+          flags = (flags | ASL_QUERY_OP_REGEX) if value.is_a?(Regexp)
+          asl_set_query(aslmsg, asl_key, value.to_s, flags)
+        end
+
+        response = asl_search(@aslclient, aslmsg)
+
+        while m = aslresponse_next(response)
+          break if m.null?
+          i = 0
+          while key = asl_key(m, i)
+            break if key.nil? || key.empty?
+            i += 1
+            value = asl_get(m, key)
+            result[key] = value
+          end
+        end
+
+        result
+      ensure
+        aslresponse_free(response) if response
+        asl_free(aslmsg)
+      end
+
       # Close the logger instance. You should always do this.
       #
       def close
         asl_free(@aslmsg) if @aslmsg
         asl_close(@aslclient) if @aslclient
       end
+
+      private
+
+      def map_key_to_asl_key(key)
+        {
+          :time     => ASL_KEY_TIME,
+          :host     => ASL_KEY_HOST,
+          :sender   => ASL_KEY_SENDER,
+          :facility => ASL_KEY_FACILITY,
+          :pid      => ASL_KEY_PID,
+          :uid      => ASL_KEY_UID,
+          :gid      => ASL_KEY_GID,
+          :level    => ASL_KEY_LEVEL,
+          :message  => ASL_KEY_MSG
+        }[key]
+      end
     end
   end
+end
+
+if $0 == __FILE__
+  log = Apple::System::Logger.new(progname: 'rubytest')
+  #log.warn("GREETINGS DANIEL WARN9")
+  #log.search(:message => "GREETINGS DANIEL WARN9")
+  p log.search(:sender => "bootlog", :level => 4)
 end
