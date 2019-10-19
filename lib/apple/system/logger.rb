@@ -11,16 +11,16 @@ module Apple
       VERSION = '0.1.0'.freeze
 
       # A syslogd facility. The system default is 'user'.
-      attr_accessor :facility
+      attr_reader :facility
 
       # The logging severity threshold. The default is debug.
-      attr_accessor :level
+      attr_reader :level
 
       # The program name, or ident, that becomes the key sender. The default is nil.
-      attr_accessor :progname
+      attr_reader :progname
 
       # If provided, a file or filehandle that the logger will multicast to. The default is nil.
-      attr_accessor :logdev
+      attr_reader :logdev
 
       # Create and return an Apple::System::Logger instance. The constructor takes a series
       # of optional arguments:
