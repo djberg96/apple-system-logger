@@ -204,8 +204,15 @@ module Apple
       #     "ASLExpireTime" => "1602480504"
       #   }]
       #
-      # Only basic equality checks are used for now. In the future, I will allow
-      # for more advanced queries, such as substrings and less than, greater than, etc.
+      # Only equality checks are used for most options. In the future, I will allow
+      # for more advanced queries, such as substrings and <, >, <=, >=.
+      #
+      # Note that Time objects are queried using "greater than or equal to" for now.
+      #
+      # Example:
+      #
+      #   # Find all logs from uid 501 from the last hour.
+      #   log.search(:uid => 501, :time => Time.now - 3600)
       #
       def search(query)
         value  = nil
