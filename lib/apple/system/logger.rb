@@ -210,7 +210,6 @@ module Apple
       def search(query)
         value  = nil
         aslmsg = asl_new(ASL_TYPE_QUERY)
-        hash = {}
         result = []
 
         query.each do |key, value|
@@ -218,6 +217,11 @@ module Apple
           flags = ASL_QUERY_OP_EQUAL
           flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
           flags = (flags | ASL_QUERY_OP_TRUE) if value == true
+
+          if value.is_a?(Time)
+            flags = (flags | ASL_QUERY_OP_GREATER_EQUAL)
+            value = value.to_i
+          end
 
           if value.is_a?(Regexp)
             flags = (flags | ASL_QUERY_OP_REGEX)
@@ -232,11 +236,12 @@ module Apple
         while m = aslresponse_next(response)
           break if m.null?
           i = 0
+          hash = {}
           while key = asl_key(m, i)
             break if key.nil? || key.empty?
-            i += 1
             value = asl_get(m, key)
             hash[key] = value
+            i += 1
           end
           result << hash
         end
