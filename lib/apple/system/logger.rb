@@ -268,10 +268,3 @@ module Apple
     end
   end
 end
-
-if $0 == __FILE__
-  log = Apple::System::Logger.new(progname: 'rubytest')
-  #log.warn("GREETINGS DANIEL WARN9")
-  #log.search(:message => "GREETINGS DANIEL WARN9")
-  p log.search(:sender => "bootlog", :level => 4)
-end
