@@ -81,6 +81,15 @@ RSpec.describe Apple::System::Logger do
     example "there is an unknown method" do
       expect(log).to respond_to(:unknown)
     end
+
+    example "there is a close method" do
+      expect(log).to respond_to(:close)
+    end
+
+    example "calling close on the logger instance works as expected" do
+      expect(log.close).to be_nil
+      expect(log.close).to be_nil
+    end
   end
 
   context "search" do

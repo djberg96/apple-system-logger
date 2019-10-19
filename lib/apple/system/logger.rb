@@ -257,6 +257,8 @@ module Apple
       def close
         asl_free(@aslmsg) if @aslmsg
         asl_close(@aslclient) if @aslclient
+        @aslmsg = nil
+        @aslclient = nil
       end
 
       private
