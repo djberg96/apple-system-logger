@@ -210,7 +210,8 @@ module Apple
       def search(query)
         value  = nil
         aslmsg = asl_new(ASL_TYPE_QUERY)
-        result = {}
+        hash = {}
+        result = []
 
         query.each do |key, value|
           asl_key = map_key_to_asl_key(key)
@@ -235,8 +236,9 @@ module Apple
             break if key.nil? || key.empty?
             i += 1
             value = asl_get(m, key)
-            result[key] = value
+            hash[key] = value
           end
+          result << hash
         end
 
         result
