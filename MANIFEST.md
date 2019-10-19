@@ -1,0 +1,9 @@
+* CHANGES.md
+* MANIFEST.md
+* Rakefile
+* README.md
+* apple-system-logger.gemspec
+* lib/apple/system/logger.rb
+* lib/apple/system/logger/constants.rb
+* lib/apple/system/logger/functions.rb
+* spec/apple-system-logger_spec.rb
