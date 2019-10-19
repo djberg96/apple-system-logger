@@ -73,6 +73,18 @@ module Apple
         asl_set_filter(@aslclient, @level)
       end
 
+      # Dump a message with no formatting at the current severity level.
+      #
+      def <<(message)
+        asl_log(@aslclient, @aslmsg, @level, message)
+      end
+
+      # Log a message at the given level.
+      #
+      def add(level, message)
+        asl_log(@aslclient, @aslmsg, level, message)
+      end
+
       # Log a debug message.
       #
       def debug(message)
@@ -142,6 +154,7 @@ module Apple
       # Close the logger instance. You should always do this.
       #
       def close
+        asl_free(@aslmsg) if @aslmsg
         asl_close(@aslclient) if @aslclient
       end
     end
