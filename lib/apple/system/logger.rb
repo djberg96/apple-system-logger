@@ -205,7 +205,7 @@ module Apple
       #   }
       #
       # Only basic equality checks are used for now. In the future, I will allow
-      # for more advanced queries.
+      # for more advanced queries, such as substrings and less than, greater than, etc.
       #
       def search(query)
         value  = nil
