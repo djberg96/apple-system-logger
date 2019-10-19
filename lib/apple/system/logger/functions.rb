@@ -11,7 +11,7 @@ module Apple
       attach_function(:asl_free, [:pointer], :void)
       attach_function(:asl_get, [:pointer, :string], :string)
       attach_function(:asl_key, [:pointer, :uint32], :string)
-      attach_function(:asl_log, [:pointer, :pointer, :int, :string], :int)
+      attach_function(:asl_log, [:pointer, :pointer, :int, :string, :varargs], :int)
       attach_function(:asl_new, [:uint32], :pointer)
       attach_function(:asl_open, [:string, :string, :uint32], :pointer)
       attach_function(:asl_remove_log_file, [:pointer, :int], :int)
