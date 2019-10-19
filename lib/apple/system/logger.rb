@@ -27,7 +27,6 @@ module Apple
       #
       # * facility
       # * level
-      # * format
       # * progname
       # * logdev
       #
