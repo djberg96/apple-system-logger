@@ -168,7 +168,7 @@ module Apple
       end
 
       # Search the logs using the provided query. The query should be a hash of
-      # options. Returns a hash of key-value pairs.
+      # options. Returns an array of hashes.
       #
       # Example:
       #
@@ -183,7 +183,7 @@ module Apple
       #
       #   # Sample output
       #
-      #   {
+      #   [{
       #     "ASLMessageID"  => "1",
       #     "Time"          => "1570858104",
       #     "TimeNanoSec"   => "0",
@@ -202,7 +202,7 @@ module Apple
       #     "ut_tv.tv_sec"  => "1570858104",
       #     "ut_tv.tv_usec" => "0",
       #     "ASLExpireTime" => "1602480504"
-      #   }
+      #   }]
       #
       # Only basic equality checks are used for now. In the future, I will allow
       # for more advanced queries, such as substrings and less than, greater than, etc.
