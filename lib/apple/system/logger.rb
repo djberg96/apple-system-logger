@@ -44,11 +44,19 @@ module Apple
       # * ASL_LEVEL_INFO
       # * ASL_LEVEL_DEBUG
       #
+      # You may optionally use a block, which will yield the logger instance and
+      # automatically close itself.
+      #
       # Example:
       #
+      #   # Typical
       #   log = Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program')
-      #
       #   log.warn("Some warning message")
+      #
+      #   # Block form
+      #   Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program') do |log|
+      #     log.warn("Some warning message")
+      #   end
       #
       def initialize(**kwargs)
         @facility = kwargs[:facility]
@@ -71,6 +79,14 @@ module Apple
         @aslmsg = asl_new(ASL_TYPE_MSG)
         asl_set(@aslmsg, ASL_KEY_FACILITY, @facility) if @facility
         asl_set_filter(@aslclient, @level)
+
+        if block_given?
+          begin
+            yield self
+          ensure
+            close
+          end
+        end
       end
 
       # Dump a message with no formatting at the current severity level.
@@ -159,16 +175,4 @@ module Apple
       end
     end
   end
-end
-
-if $0 == __FILE__
-  #log = Apple::System::Logger.new(level: Apple::System::Logger::ASL_LEVEL_NOTICE)
-  #log = Apple::System::Logger.new(logdev: $stdout, progname: "rubyprog", facility: "dberger.test")
-  #log = Apple::System::Logger.new(logdev: $stderr, progname: "rubyprog", facility: "dberger.test")
-  log = Apple::System::Logger.new(logdev: File.open('temp.log', 'w'), progname: "rubyprog", facility: "dberger.test")
-  #p log.info?
-  #p log.warn?
-  #log.info("GREETINGS DANIEL - INFO")
-  log.warn("GREETINGS DANIEL - WARN7")
-  log.close
 end
