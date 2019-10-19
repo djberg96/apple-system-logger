@@ -20,12 +20,12 @@ module Apple
       ASL_LEVEL_INFO    = 6
       ASL_LEVEL_DEBUG   = 7
 
-      ASL_TYPE_MSG    0
-      ASL_TYPE_QUERY  1
-      ASL_TYPE_LIST   2
-      ASL_TYPE_FILE   3
-      ASL_TYPE_STORE  4
-      ASL_TYPE_CLIENT 5
+      ASL_TYPE_MSG    = 0
+      ASL_TYPE_QUERY  = 1
+      ASL_TYPE_LIST   = 2
+      ASL_TYPE_FILE   = 3
+      ASL_TYPE_STORE  = 4
+      ASL_TYPE_CLIENT = 5
     end
   end
 end
