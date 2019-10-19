@@ -216,6 +216,7 @@ module Apple
           asl_key = map_key_to_asl_key(key)
           flags = ASL_QUERY_OP_EQUAL
           flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
+          flags = (flags | ASL_QUERY_OP_TRUE) if value == true
 
           if value.is_a?(Regexp)
             flags = (flags | ASL_QUERY_OP_REGEX)
