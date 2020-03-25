@@ -3,6 +3,16 @@ require 'apple-system-logger'
 RSpec.describe Apple::System::Logger do
   let(:log){ described_class.new }
 
+  context "version" do
+    example "version constant is set to expected value" do
+      expect(described_class::VERSION).to eql('0.1.1')
+    end
+
+    example "version constant is frozen" do
+      expect(described_class::VERSION).to be_frozen
+    end
+  end
+
   context "instance methods" do
     example "defines a facility method" do
       expect(log).to respond_to(:facility)
@@ -109,7 +119,7 @@ RSpec.describe Apple::System::Logger do
       result = log.search(:sender => 'bootlog', :level => 5)
       expect(result).to be_a_kind_of(Array)
       expect(result.first).to be_a_kind_of(Hash)
-      expect(result.size).to eql(1)
+      expect(result.size).to be >= 1
     end
   end
 end
