@@ -29,8 +29,10 @@ module Apple
       # * level
       # * progname
       # * logdev
+      # * stderr
       #
       # Note that the logdev only seems to work with $stdout or $stderr, if provided.
+      # You can also specify ':stderr => true' to automatically multicast to stderr.
       #
       # For the severity level, the possible values are:
       #
@@ -65,9 +67,12 @@ module Apple
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
         @progname = kwargs[:progname]
         @logdev   = kwargs[:logdev]
+        @stderr   = kwargs[:stderr]
 
         if @logdev || @facility || @progname
           options = ASL_OPT_NO_DELAY | ASL_OPT_NO_REMOTE
+          options |= ASL_OPT_STDERR if @stderr
+
           @aslclient = asl_open(@progname, @facility, options)
 
           if @logdev
