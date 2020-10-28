@@ -29,8 +29,10 @@ module Apple
       # * level
       # * progname
       # * logdev
+      # * stderr
       #
       # Note that the logdev only seems to work with $stdout or $stderr, if provided.
+      # You can also specify ':stderr => true' to automatically multicast to stderr.
       #
       # For the severity level, the possible values are:
       #
@@ -51,6 +53,7 @@ module Apple
       #   # Typical
       #   log = Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program')
       #   log.warn("Some warning message")
+      #   log.close
       #
       #   # Block form
       #   Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program') do |log|
@@ -64,9 +67,12 @@ module Apple
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
         @progname = kwargs[:progname]
         @logdev   = kwargs[:logdev]
+        @stderr   = kwargs[:stderr]
 
         if @logdev || @facility || @progname
           options = ASL_OPT_NO_DELAY | ASL_OPT_NO_REMOTE
+          options |= ASL_OPT_STDERR if @stderr
+
           @aslclient = asl_open(@progname, @facility, options)
 
           if @logdev
@@ -208,6 +214,9 @@ module Apple
       # for more advanced queries, such as substrings and <, >, <=, >=.
       #
       # Note that Time objects are queried using "greater than or equal to" for now.
+      #
+      # You can use a regular expression as a value, though special options are
+      # limited to 'i' (case insensitive).
       #
       # Example:
       #
