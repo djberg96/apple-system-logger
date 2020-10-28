@@ -8,7 +8,7 @@ module Apple
       include Apple::System::LoggerConstants
 
       # The version of this library.
-      VERSION = '0.1.1'.freeze
+      VERSION = '0.1.2'.freeze
 
       # A syslogd facility. The system default is 'user'.
       attr_reader :facility
