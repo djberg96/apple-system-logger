@@ -1,4 +1,5 @@
 * CHANGES.md
+* Gemfile
 * MANIFEST.md
 * Rakefile
 * README.md
