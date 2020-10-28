@@ -51,6 +51,7 @@ module Apple
       #   # Typical
       #   log = Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program')
       #   log.warn("Some warning message")
+      #   log.close
       #
       #   # Block form
       #   Apple::System::Logger.new(facility: 'com.apple.console', progname: 'my-program') do |log|
@@ -208,6 +209,9 @@ module Apple
       # for more advanced queries, such as substrings and <, >, <=, >=.
       #
       # Note that Time objects are queried using "greater than or equal to" for now.
+      #
+      # You can use a regular expression as a value, though special options are
+      # limited to 'i' (case insensitive).
       #
       # Example:
       #
