@@ -6,7 +6,7 @@ include RbConfig
 
 RSpec::Core::RakeTask.new(:spec)
 
-CLEAN.include('**/*.gem', '**/*.rbc', '**/*.rbx')
+CLEAN.include('**/*.gem', '**/*.rbc', '**/*.rbx', '**/*.lock')
 
 namespace 'gem' do
   desc "Create the apple-system-logger gem"
@@ -14,7 +14,7 @@ namespace 'gem' do
     require 'rubygems/package'
     spec = eval(IO.read('apple-system-logger.gemspec'))
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
-    Gem::Package.build(spec, true)
+    Gem::Package.build(spec)
   end
 
   desc "Install the apple-system-logger gem"
