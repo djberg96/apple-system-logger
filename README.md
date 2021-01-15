@@ -5,7 +5,7 @@ A Ruby interface for the Apple system logger.
 gem install apple-system-logger
 
 ## Synopsis
-```
+```ruby
 require 'apple-system-logger'
 
 # With defaults
