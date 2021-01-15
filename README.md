@@ -40,7 +40,7 @@ because the API does not explicitly forbid other file descriptors, nor
 does it raise an error.
 
 ## Copyright
-(C) 2020 Daniel J. Berger, All Rights Reserved
+(C) 2020-2021 Daniel J. Berger, All Rights Reserved
 
 ## Warranty
 This package is provided "as is" and without any express or
