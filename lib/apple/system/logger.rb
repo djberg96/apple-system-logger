@@ -224,7 +224,6 @@ module Apple
       #   log.search(:uid => 501, :time => Time.now - 3600)
       #
       def search(query)
-        value  = nil
         aslmsg = asl_new(ASL_TYPE_QUERY)
         result = []
 
