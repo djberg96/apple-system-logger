@@ -1,3 +1,5 @@
+[![Ruby](https://github.com/djberg96/apple-system-logger/actions/workflows/ruby.yml/badge.svg)](https://github.com/djberg96/apple-system-logger/actions/workflows/ruby.yml)
+
 ## apple-system-logger
 A Ruby interface for the Apple system logger.
 
