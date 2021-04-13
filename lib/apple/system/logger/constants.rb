@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Apple
   module System
     module LoggerConstants
