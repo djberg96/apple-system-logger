@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'logger/functions'
 require_relative 'logger/constants'
 
