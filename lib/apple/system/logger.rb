@@ -282,15 +282,15 @@ module Apple
 
       def map_key_to_asl_key(key)
         {
-          :time     => ASL_KEY_TIME,
-          :host     => ASL_KEY_HOST,
-          :sender   => ASL_KEY_SENDER,
+          :time => ASL_KEY_TIME,
+          :host => ASL_KEY_HOST,
+          :sender => ASL_KEY_SENDER,
           :facility => ASL_KEY_FACILITY,
-          :pid      => ASL_KEY_PID,
-          :uid      => ASL_KEY_UID,
-          :gid      => ASL_KEY_GID,
-          :level    => ASL_KEY_LEVEL,
-          :message  => ASL_KEY_MSG
+          :pid => ASL_KEY_PID,
+          :uid => ASL_KEY_UID,
+          :gid => ASL_KEY_GID,
+          :level => ASL_KEY_LEVEL,
+          :message => ASL_KEY_MSG
         }[key]
       end
     end

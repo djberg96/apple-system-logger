@@ -10,6 +10,8 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
+Style/HashSyntax:
+  Enabled: false
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
 Layout/CaseIndentation:
@@ -26,4 +28,4 @@ Metrics/PerceivedComplexity:
   Enabled: false
 Naming/FileName:
   Exclude:
-    - 'lib/archive-tar-external.rb'
+    - 'lib/apple-system-logger.rb'
