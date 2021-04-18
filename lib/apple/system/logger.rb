@@ -3,8 +3,11 @@
 require_relative 'logger/functions'
 require_relative 'logger/constants'
 
+# The Apple module serves as a namespace only.
 module Apple
+  # The System module serves only as a namespace.
   module System
+    # The Logger class encapsulates the logging functions of the OSX logging API.
     class Logger
       include Apple::System::LoggerFunctions
       include Apple::System::LoggerConstants
@@ -77,9 +80,7 @@ module Apple
 
           @aslclient = asl_open(@progname, @facility, options)
 
-          if @logdev
-            asl_add_log_file(@aslclient, @logdev.fileno)
-          end
+          asl_add_log_file(@aslclient, @logdev.fileno) if @logdev
         else
           @aslclient = nil
         end
@@ -282,15 +283,15 @@ module Apple
 
       def map_key_to_asl_key(key)
         {
-          :time     => ASL_KEY_TIME,
-          :host     => ASL_KEY_HOST,
-          :sender   => ASL_KEY_SENDER,
+          :time => ASL_KEY_TIME,
+          :host => ASL_KEY_HOST,
+          :sender => ASL_KEY_SENDER,
           :facility => ASL_KEY_FACILITY,
-          :pid      => ASL_KEY_PID,
-          :uid      => ASL_KEY_UID,
-          :gid      => ASL_KEY_GID,
-          :level    => ASL_KEY_LEVEL,
-          :message  => ASL_KEY_MSG
+          :pid => ASL_KEY_PID,
+          :uid => ASL_KEY_UID,
+          :gid => ASL_KEY_GID,
+          :level => ASL_KEY_LEVEL,
+          :message => ASL_KEY_MSG
         }[key]
       end
     end
