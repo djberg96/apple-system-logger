@@ -3,8 +3,11 @@
 require_relative 'logger/functions'
 require_relative 'logger/constants'
 
+# The Apple module serves as a namespace only.
 module Apple
+  # The System module serves only as a namespace.
   module System
+    # The Logger class encapsulates the logging functions of the OSX logging API.
     class Logger
       include Apple::System::LoggerFunctions
       include Apple::System::LoggerConstants
@@ -77,9 +80,7 @@ module Apple
 
           @aslclient = asl_open(@progname, @facility, options)
 
-          if @logdev
-            asl_add_log_file(@aslclient, @logdev.fileno)
-          end
+          asl_add_log_file(@aslclient, @logdev.fileno) if @logdev
         else
           @aslclient = nil
         end
