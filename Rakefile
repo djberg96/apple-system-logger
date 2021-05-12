@@ -12,7 +12,7 @@ namespace 'gem' do
   desc "Create the apple-system-logger gem"
   task :create => [:clean] do
     require 'rubygems/package'
-    spec = eval(IO.read('apple-system-logger.gemspec'))
+    spec = Gem::Specification.load('apple-system-logger.gemspec')
     spec.signing_key = File.join(Dir.home, '.ssh', 'gem-private_key.pem')
     Gem::Package.build(spec)
   end
