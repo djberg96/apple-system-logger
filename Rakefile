@@ -1,8 +1,6 @@
 require 'rake'
 require 'rake/clean'
-require 'rbconfig'
 require 'rspec/core/rake_task'
-include RbConfig
 
 RSpec::Core::RakeTask.new(:spec)
 
