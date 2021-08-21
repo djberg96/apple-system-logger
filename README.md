@@ -6,6 +6,9 @@ A Ruby interface for the Apple system logger.
 ## Installation
 gem install apple-system-logger
 
+## Adding the trusted cert
+`gem cert --add <(curl -Ls https://raw.githubusercontent.com/djberg96/apple-system-logger/main/certs/djberg96_pub.pem)`
+
 ## Synopsis
 ```ruby
 require 'apple-system-logger'
