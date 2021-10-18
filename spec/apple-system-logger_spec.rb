@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'apple-system-logger'
 
 RSpec.describe Apple::System::Logger do
@@ -89,7 +91,7 @@ RSpec.describe Apple::System::Logger do
     end
 
     example 'there is a fatal method' do
-      expect(log).to respond_to(:error)
+      expect(log).to respond_to(:fatal)
     end
 
     example 'there is a fatal? method that returns the expected value' do
