@@ -17,12 +17,13 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rspec', '~> 3.9')
 
   spec.metadata = {
-    'homepage_uri'      => 'https://github.com/djberg96/apple-system-logger',
-    'bug_tracker_uri'   => 'https://github.com/djberg96/apple-system-logger/issues',
-    'changelog_uri'     => 'https://github.com/djberg96/apple-system-logger/blob/main/CHANGES.md',
-    'documentation_uri' => 'https://github.com/djberg96/apple-system-logger/wiki',
-    'source_code_uri'   => 'https://github.com/djberg96/apple-system-logger',
-    'wiki_uri'          => 'https://github.com/djberg96/apple-system-logger/wiki'
+    'homepage_uri'          => 'https://github.com/djberg96/apple-system-logger',
+    'bug_tracker_uri'       => 'https://github.com/djberg96/apple-system-logger/issues',
+    'changelog_uri'         => 'https://github.com/djberg96/apple-system-logger/blob/main/CHANGES.md',
+    'documentation_uri'     => 'https://github.com/djberg96/apple-system-logger/wiki',
+    'source_code_uri'       => 'https://github.com/djberg96/apple-system-logger',
+    'wiki_uri'              => 'https://github.com/djberg96/apple-system-logger/wiki',
+    'rubygems_mfa_required' => 'true'
   }
 
   spec.description = <<-EOF
