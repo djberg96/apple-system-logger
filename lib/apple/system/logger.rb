@@ -152,7 +152,7 @@ module Apple
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
       end
 
-      # Returns true if the current severity level allows for the printing of erro messages.
+      # Returns true if the current severity level allows for the printing of error messages.
       #
       def error?
         level >= ASL_LEVEL_ERR
