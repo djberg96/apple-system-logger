@@ -11,6 +11,10 @@ RSpec/InstanceVariable:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - apple-system-logger.gemspec
+    - Gemfile
+    - Rakefile
 Lint/AssignmentInCondition:
   Enabled: false
 Style/MethodCallWithoutArgsParentheses:
