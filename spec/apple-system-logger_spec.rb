@@ -119,8 +119,8 @@ RSpec.describe Apple::System::Logger do
 
     example 'a basic search returns the expected results' do
       result = log.search(:sender => 'bootlog', :level => 5)
-      expect(result).to be_a_kind_of(Array)
-      expect(result.first).to be_a_kind_of(Hash)
+      expect(result).to be_a(Array)
+      expect(result.first).to be_a(Hash)
       expect(result.size).to be >= 1
     end
   end
