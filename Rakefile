@@ -3,8 +3,6 @@ require 'rake/clean'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
-RSpec::Core::RakeTask.new(:spec)
-
 CLEAN.include('**/*.gem', '**/*.rbc', '**/*.rbx', '**/*.lock')
 
 namespace 'gem' do
@@ -23,6 +21,16 @@ namespace 'gem' do
   end
 end
 
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.verbose = true
+  t.rspec_opts = '-f documentation'
+end
+
 RuboCop::RakeTask.new
+
+# Clean up afterwards
+Rake::Task[:spec].enhance do
+  Rake::Task[:clean].invoke
+end
 
 task :default => :spec
