@@ -123,5 +123,9 @@ RSpec.describe Apple::System::Logger do
       expect(result.first).to be_a(Hash)
       expect(result.size).to be >= 1
     end
+
+    example 'search keys must be valid' do
+      expect{ log.search(:bogus => 'bootlog') }.to raise_error(KeyError)
+    end
   end
 end
