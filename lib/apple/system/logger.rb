@@ -124,7 +124,7 @@ module Apple
       # Returns true if the current severity level allows for the printing of debug messages.
       #
       def debug?
-        @monitor.synchronize { level >= ASL_LEVEL_DEBUG }
+        level >= ASL_LEVEL_DEBUG
       end
 
       # Log an info message.
@@ -138,7 +138,7 @@ module Apple
       # Returns true if the current severity level allows for the printing of info messages.
       #
       def info?
-        @monitor.synchronize { level >= ASL_LEVEL_INFO }
+        level >= ASL_LEVEL_INFO
       end
 
       # Log a warning message.
@@ -152,7 +152,7 @@ module Apple
       # Returns true if the current severity level allows for the printing of warning messages.
       #
       def warn?
-        @monitor.synchronize { level >= ASL_LEVEL_WARNING }
+        level >= ASL_LEVEL_WARNING
       end
 
       # Log an error message.
@@ -166,7 +166,7 @@ module Apple
       # Returns true if the current severity level allows for the printing of error messages.
       #
       def error?
-        @monitor.synchronize { level >= ASL_LEVEL_ERR }
+        level >= ASL_LEVEL_ERR
       end
 
       # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
@@ -180,7 +180,7 @@ module Apple
       # Returns true if the current severity level allows for the printing of fatal messages.
       #
       def fatal?
-        @monitor.synchronize { level >= ASL_LEVEL_CRIT }
+        level >= ASL_LEVEL_CRIT
       end
 
       # Log an unknown message. For this library that means an ASL_LEVEL_EMERG message.
