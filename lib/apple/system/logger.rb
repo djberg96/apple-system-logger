@@ -148,7 +148,7 @@ module Apple
 
       # Log an error message.
       #
-      def error
+      def error(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
       end
 
@@ -160,7 +160,7 @@ module Apple
 
       # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
       #
-      def fatal
+      def fatal(message)
         asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
       end
 
