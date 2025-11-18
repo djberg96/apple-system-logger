@@ -2,7 +2,7 @@
 
 require_relative 'logger/functions'
 require_relative 'logger/constants'
-require 'mutex_m'
+require 'monitor'
 
 # The Apple module serves as a namespace only.
 module Apple
@@ -69,7 +69,7 @@ module Apple
       # TODO: Add string format support and apply it to messages.
       #
       def initialize(**kwargs)
-        @mutex = Mutex.new
+        @mutex = Monitor.new
 
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
