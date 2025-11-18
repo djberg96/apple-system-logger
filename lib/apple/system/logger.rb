@@ -2,6 +2,7 @@
 
 require_relative 'logger/functions'
 require_relative 'logger/constants'
+require 'mutex_m'
 
 # The Apple module serves as a namespace only.
 module Apple
@@ -13,7 +14,7 @@ module Apple
       include Apple::System::LoggerConstants
 
       # The version of this library.
-      VERSION = '0.1.2'
+      VERSION = '0.2.0'
 
       # A syslogd facility. The system default is 'user'.
       attr_reader :facility
@@ -68,6 +69,8 @@ module Apple
       # TODO: Add string format support and apply it to messages.
       #
       def initialize(**kwargs)
+        @mutex = Mutex.new
+
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
         @progname = kwargs[:progname]
@@ -101,79 +104,95 @@ module Apple
       # Dump a message with no formatting at the current severity level.
       #
       def <<(message)
-        asl_log(@aslclient, @aslmsg, @level, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, @level, message)
+        end
       end
 
       # Log a message at the given level.
       #
       def add(level, message)
-        asl_log(@aslclient, @aslmsg, level, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, level, message)
+        end
       end
 
       # Log a debug message.
       #
       def debug(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
+        end
       end
 
       # Returns true if the current severity level allows for the printing of debug messages.
       #
       def debug?
-        level >= ASL_LEVEL_DEBUG
+        @mutex.synchronize { level >= ASL_LEVEL_DEBUG }
       end
 
       # Log an info message.
       #
       def info(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
+        end
       end
 
       # Returns true if the current severity level allows for the printing of info messages.
       #
       def info?
-        level >= ASL_LEVEL_INFO
+        @mutex.synchronize { level >= ASL_LEVEL_INFO }
       end
 
       # Log a warning message.
       #
       def warn(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
+        end
       end
 
       # Returns true if the current severity level allows for the printing of warning messages.
       #
       def warn?
-        level >= ASL_LEVEL_WARNING
+        @mutex.synchronize { level >= ASL_LEVEL_WARNING }
       end
 
       # Log an error message.
       #
       def error(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
+        end
       end
 
       # Returns true if the current severity level allows for the printing of error messages.
       #
       def error?
-        level >= ASL_LEVEL_ERR
+        @mutex.synchronize { level >= ASL_LEVEL_ERR }
       end
 
       # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
       #
       def fatal(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
+        end
       end
 
       # Returns true if the current severity level allows for the printing of fatal messages.
       #
       def fatal?
-        level >= ASL_LEVEL_CRIT
+        @mutex.synchronize { level >= ASL_LEVEL_CRIT }
       end
 
       # Log an unknown message. For this library that means an ASL_LEVEL_EMERG message.
       #
       def unknown(message)
-        asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
+        @mutex.synchronize do
+          asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
+        end
       end
 
       # Search the logs using the provided query. The query should be a hash of
@@ -227,57 +246,61 @@ module Apple
       #   log.search(:uid => 501, :time => Time.now - 3600)
       #
       def search(query)
-        aslmsg = asl_new(ASL_TYPE_QUERY)
-        result = []
+        @mutex.synchronize do
+          aslmsg = asl_new(ASL_TYPE_QUERY)
+          result = []
 
-        query.each do |key, value|
-          asl_key = map_key_to_asl_key(key)
+          query.each do |key, value|
+            asl_key = map_key_to_asl_key(key)
 
-          flags = ASL_QUERY_OP_EQUAL
-          flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
-          flags = (flags | ASL_QUERY_OP_TRUE) if value == true
+            flags = ASL_QUERY_OP_EQUAL
+            flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
+            flags = (flags | ASL_QUERY_OP_TRUE) if value == true
 
-          if value.is_a?(Time)
-            flags = (flags | ASL_QUERY_OP_GREATER_EQUAL)
-            value = value.to_i
+            if value.is_a?(Time)
+              flags = (flags | ASL_QUERY_OP_GREATER_EQUAL)
+              value = value.to_i
+            end
+
+            if value.is_a?(Regexp)
+              flags = (flags | ASL_QUERY_OP_REGEX)
+              flags = (flags | ASL_QUERY_OP_CASEFOLD) if value.casefold?
+            end
+
+            asl_set_query(aslmsg, asl_key, value.to_s, flags)
           end
 
-          if value.is_a?(Regexp)
-            flags = (flags | ASL_QUERY_OP_REGEX)
-            flags = (flags | ASL_QUERY_OP_CASEFOLD) if value.casefold?
+          response = asl_search(@aslclient, aslmsg)
+
+          while m = aslresponse_next(response)
+            break if m.null?
+            i = 0
+            hash = {}
+            while key = asl_key(m, i)
+              break if key.nil? || key.empty?
+              value = asl_get(m, key)
+              hash[key] = value
+              i += 1
+            end
+            result << hash
           end
 
-          asl_set_query(aslmsg, asl_key, value.to_s, flags)
+          result
+        ensure
+          aslresponse_free(response) if response
+          asl_free(aslmsg)
         end
-
-        response = asl_search(@aslclient, aslmsg)
-
-        while m = aslresponse_next(response)
-          break if m.null?
-          i = 0
-          hash = {}
-          while key = asl_key(m, i)
-            break if key.nil? || key.empty?
-            value = asl_get(m, key)
-            hash[key] = value
-            i += 1
-          end
-          result << hash
-        end
-
-        result
-      ensure
-        aslresponse_free(response) if response
-        asl_free(aslmsg)
       end
 
       # Close the logger instance. You should always do this.
       #
       def close
-        asl_free(@aslmsg) if @aslmsg
-        asl_close(@aslclient) if @aslclient
-        @aslmsg = nil
-        @aslclient = nil
+        @mutex.synchronize do
+          asl_free(@aslmsg) if @aslmsg
+          asl_close(@aslclient) if @aslclient
+          @aslmsg = nil
+          @aslclient = nil
+        end
       end
 
       private
