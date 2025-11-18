@@ -7,7 +7,7 @@ RSpec.describe Apple::System::Logger do
 
   context 'version' do
     example 'version constant is set to expected value' do
-      expect(described_class::VERSION).to eql('0.1.2')
+      expect(described_class::VERSION).to eql('0.2.0')
     end
 
     example 'version constant is frozen' do
