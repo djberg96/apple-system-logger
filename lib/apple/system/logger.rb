@@ -69,7 +69,7 @@ module Apple
       # TODO: Add string format support and apply it to messages.
       #
       def initialize(**kwargs)
-        @mutex = Monitor.new
+        @monitor = Monitor.new
 
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
@@ -104,7 +104,7 @@ module Apple
       # Dump a message with no formatting at the current severity level.
       #
       def <<(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, @level, message)
         end
       end
@@ -112,7 +112,7 @@ module Apple
       # Log a message at the given level.
       #
       def add(level, message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, level, message)
         end
       end
@@ -120,7 +120,7 @@ module Apple
       # Log a debug message.
       #
       def debug(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
         end
       end
@@ -128,13 +128,13 @@ module Apple
       # Returns true if the current severity level allows for the printing of debug messages.
       #
       def debug?
-        @mutex.synchronize { level >= ASL_LEVEL_DEBUG }
+        @monitor.synchronize { level >= ASL_LEVEL_DEBUG }
       end
 
       # Log an info message.
       #
       def info(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
         end
       end
@@ -142,13 +142,13 @@ module Apple
       # Returns true if the current severity level allows for the printing of info messages.
       #
       def info?
-        @mutex.synchronize { level >= ASL_LEVEL_INFO }
+        @monitor.synchronize { level >= ASL_LEVEL_INFO }
       end
 
       # Log a warning message.
       #
       def warn(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
         end
       end
@@ -156,13 +156,13 @@ module Apple
       # Returns true if the current severity level allows for the printing of warning messages.
       #
       def warn?
-        @mutex.synchronize { level >= ASL_LEVEL_WARNING }
+        @monitor.synchronize { level >= ASL_LEVEL_WARNING }
       end
 
       # Log an error message.
       #
       def error(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
         end
       end
@@ -170,13 +170,13 @@ module Apple
       # Returns true if the current severity level allows for the printing of error messages.
       #
       def error?
-        @mutex.synchronize { level >= ASL_LEVEL_ERR }
+        @monitor.synchronize { level >= ASL_LEVEL_ERR }
       end
 
       # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
       #
       def fatal(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
         end
       end
@@ -184,13 +184,13 @@ module Apple
       # Returns true if the current severity level allows for the printing of fatal messages.
       #
       def fatal?
-        @mutex.synchronize { level >= ASL_LEVEL_CRIT }
+        @monitor.synchronize { level >= ASL_LEVEL_CRIT }
       end
 
       # Log an unknown message. For this library that means an ASL_LEVEL_EMERG message.
       #
       def unknown(message)
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
         end
       end
@@ -246,7 +246,7 @@ module Apple
       #   log.search(:uid => 501, :time => Time.now - 3600)
       #
       def search(query)
-        @mutex.synchronize do
+        @monitor.synchronize do
           aslmsg = asl_new(ASL_TYPE_QUERY)
           result = []
 
@@ -295,7 +295,7 @@ module Apple
       # Close the logger instance. You should always do this.
       #
       def close
-        @mutex.synchronize do
+        @monitor.synchronize do
           asl_free(@aslmsg) if @aslmsg
           asl_close(@aslclient) if @aslclient
           @aslmsg = nil
