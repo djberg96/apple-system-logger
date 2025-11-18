@@ -232,6 +232,7 @@ module Apple
 
         query.each do |key, value|
           asl_key = map_key_to_asl_key(key)
+
           flags = ASL_QUERY_OP_EQUAL
           flags = (flags | ASL_QUERY_OP_NUMERIC) if value.is_a?(Numeric)
           flags = (flags | ASL_QUERY_OP_TRUE) if value == true
@@ -292,7 +293,7 @@ module Apple
           :gid => ASL_KEY_GID,
           :level => ASL_KEY_LEVEL,
           :message => ASL_KEY_MSG
-        }[key]
+        }.fetch(key)
       end
     end
   end
