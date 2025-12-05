@@ -101,7 +101,6 @@ module Apple
       #
       def <<(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, @level, message)
         end
       end
@@ -110,7 +109,6 @@ module Apple
       #
       def add(level, message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, level, message)
         end
       end
@@ -119,7 +117,6 @@ module Apple
       #
       def debug(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
         end
       end
@@ -134,7 +131,6 @@ module Apple
       #
       def info(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
         end
       end
@@ -149,7 +145,6 @@ module Apple
       #
       def warn(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
         end
       end
@@ -164,7 +159,6 @@ module Apple
       #
       def error(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
         end
       end
@@ -179,7 +173,6 @@ module Apple
       #
       def fatal(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
         end
       end
@@ -194,7 +187,6 @@ module Apple
       #
       def unknown(message)
         @monitor.synchronize do
-          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
         end
       end
@@ -252,7 +244,6 @@ module Apple
       def search(query)
         @monitor.synchronize do
           result = []
-          return result if @aslclient.nil?
 
           aslmsg = asl_new(ASL_TYPE_QUERY)
 
