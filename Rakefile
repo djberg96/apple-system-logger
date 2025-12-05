@@ -23,7 +23,7 @@ end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = true
-  t.rspec_opts = '-f documentation'
+  t.rspec_opts = '-f documentation -w'
 end
 
 RuboCop::RakeTask.new
