@@ -168,6 +168,7 @@ module Apple
       #
       def error(message)
         @monitor.synchronize do
+          return if @aslclient.nil? || @aslmsg.nil?
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
         end
       end
