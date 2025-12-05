@@ -77,16 +77,12 @@ module Apple
         @logdev   = kwargs[:logdev]
         @stderr   = kwargs[:stderr]
 
-        if @logdev || @facility || @progname
-          options = ASL_OPT_NO_DELAY | ASL_OPT_NO_REMOTE
-          options |= ASL_OPT_STDERR if @stderr
+        options = ASL_OPT_NO_DELAY | ASL_OPT_NO_REMOTE
+        options |= ASL_OPT_STDERR if @stderr
 
-          @aslclient = asl_open(@progname, @facility, options)
+        @aslclient = asl_open(@progname, @facility, options)
 
-          asl_add_log_file(@aslclient, @logdev.fileno) if @logdev
-        else
-          @aslclient = nil
-        end
+        asl_add_log_file(@aslclient, @logdev.fileno) if @logdev
 
         @aslmsg = asl_new(ASL_TYPE_MSG)
         asl_set(@aslmsg, ASL_KEY_FACILITY, @facility) if @facility
