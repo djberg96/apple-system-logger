@@ -269,6 +269,10 @@ module Apple
 
           response = asl_search(@aslclient, aslmsg)
 
+          if response.nil?
+            raise RuntimeError, "asl_search function call failed"
+          end
+
           while m = aslresponse_next(response)
             break if m.null?
             i = 0
