@@ -255,8 +255,10 @@ module Apple
       #
       def search(query)
         @monitor.synchronize do
-          aslmsg = asl_new(ASL_TYPE_QUERY)
           result = []
+          return result if @aslclient.nil?
+
+          aslmsg = asl_new(ASL_TYPE_QUERY)
 
           query.each do |key, value|
             asl_key = map_key_to_asl_key(key)
