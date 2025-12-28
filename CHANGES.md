@@ -1,3 +1,9 @@
+## 0.1.3 - 28-Dec-2025
+* Fixed the missing message parameter for the error and fatal methods.
+* Added stricter enforcement for search keys.
+* The constructor was modified internally for proper initialization.
+* Some rubocop cleanup, spec updates, and workflow action tweaks.
+
 ## 0.1.2 - 28-Oct-2020
 * Added the :stderr option.
 * Added a Gemfile.

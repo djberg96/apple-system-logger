@@ -13,7 +13,7 @@ module Apple
       include Apple::System::LoggerConstants
 
       # The version of this library.
-      VERSION = '0.1.2'
+      VERSION = '0.1.3'
 
       # A syslogd facility. The system default is 'user'.
       attr_reader :facility
