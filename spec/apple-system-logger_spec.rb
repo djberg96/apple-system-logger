@@ -127,5 +127,14 @@ RSpec.describe Apple::System::Logger do
     example 'search keys must be valid' do
       expect{ log.search(:bogus => 'bootlog') }.to raise_error(KeyError)
     end
+
+    example 'returns an empty result if nothing is found' do
+      expect(log.search(:sender => 'bogus')).to be_empty
+    end
+
+    example 'asl_search raises an error if it fails' do
+      allow(log).to receive(:asl_search).and_return(nil)
+      expect{ log.search(:sender => 'bootlog', :level => 5) }.to raise_error(RuntimeError)
+    end
   end
 end
