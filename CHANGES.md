@@ -1,3 +1,6 @@
+## 0.2.0 - 24-Jan-2026
+* Make it thread safe.
+
 ## 0.1.3 - 28-Dec-2025
 * Fixed the missing message parameter for the error and fatal methods.
 * Added stricter enforcement for search keys.
