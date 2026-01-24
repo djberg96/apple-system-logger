@@ -2,7 +2,7 @@
 
 require_relative 'logger/functions'
 require_relative 'logger/constants'
-require 'monitor'
+require 'thread'
 
 # The Apple module serves as a namespace only.
 module Apple
@@ -69,7 +69,7 @@ module Apple
       # TODO: Add string format support and apply it to messages.
       #
       def initialize(**kwargs)
-        @monitor = Monitor.new
+        @mutex = Mutex.new
 
         @facility = kwargs[:facility]
         @level    = kwargs[:level] || ASL_LEVEL_DEBUG
@@ -100,7 +100,7 @@ module Apple
       # Dump a message with no formatting at the current severity level.
       #
       def <<(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, @level, message)
         end
       end
@@ -108,7 +108,7 @@ module Apple
       # Log a message at the given level.
       #
       def add(level, message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, level, message)
         end
       end
@@ -116,7 +116,7 @@ module Apple
       # Log a debug message.
       #
       def debug(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_DEBUG, message)
         end
       end
@@ -130,7 +130,7 @@ module Apple
       # Log an info message.
       #
       def info(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_INFO, message)
         end
       end
@@ -144,7 +144,7 @@ module Apple
       # Log a warning message.
       #
       def warn(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_WARNING, message)
         end
       end
@@ -158,7 +158,7 @@ module Apple
       # Log an error message.
       #
       def error(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_ERR, message)
         end
       end
@@ -172,7 +172,7 @@ module Apple
       # Log a fatal message. For this library that means an ASL_LEVEL_CRIT message.
       #
       def fatal(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_CRIT, message)
         end
       end
@@ -186,7 +186,7 @@ module Apple
       # Log an unknown message. For this library that means an ASL_LEVEL_EMERG message.
       #
       def unknown(message)
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_log(@aslclient, @aslmsg, ASL_LEVEL_EMERG, message)
         end
       end
@@ -242,7 +242,7 @@ module Apple
       #   log.search(:uid => 501, :time => Time.now - 3600)
       #
       def search(query)
-        @monitor.synchronize do
+        @mutex.synchronize do
           result = []
 
           aslmsg = asl_new(ASL_TYPE_QUERY)
@@ -296,7 +296,7 @@ module Apple
       # Close the logger instance. You should always do this.
       #
       def close
-        @monitor.synchronize do
+        @mutex.synchronize do
           asl_free(@aslmsg) if @aslmsg
           asl_close(@aslclient) if @aslclient
           @aslmsg = nil
